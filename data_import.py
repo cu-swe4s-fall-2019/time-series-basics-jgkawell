@@ -75,9 +75,5 @@ if __name__ == '__main__':
     data_15 = []  # a list with time rounded to 15min
 
     # print to a csv file
-    printLargeArray(data_5 files_lst,
-                    args.output_file + '_5',
-                    args.sort_key)
-    printLargeArray(data_15, files_lst,
-                    args.output_file + '_15',
-                    args.sort_key)
+    printArray(data_5, files_lst, args.output_file + '_5', args.sort_key)
+    printArray(data_15, files_lst, args.output_file + '_15', args.sort_key)
