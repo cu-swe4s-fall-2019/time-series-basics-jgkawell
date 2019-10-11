@@ -13,3 +13,5 @@ before_install:
     - conda install --yes python=3.6
 
 script:
+    - pycodestyle *.py
+    - python data_import.py ./smallData tmp.data key
