@@ -174,6 +174,7 @@ if __name__ == '__main__':
     for f in files_lst:
         data_lst.append(ImportData(folder_path+'/'+f))
 
+    # NOTE: This is for user-defined resolution
     # convert to zipped, rounded data
     zip_data = []
     for data in data_lst:
@@ -181,3 +182,21 @@ if __name__ == '__main__':
 
     # print to a csv file
     printArray(zip_data, files_lst, args.output_file, 'cgm_small.csv')
+
+    # NOTE: This is for 5min resolution
+    # convert to zipped, rounded data
+    zip_data = []
+    for data in data_lst:
+        zip_data.append(roundTimeArray(data, 5))
+
+    # print to a csv file
+    printArray(zip_data, files_lst, 'hw_data_5.csv', 'cgm_small.csv')
+
+    # NOTE: This is for 15min resolution
+    # convert to zipped, rounded data
+    zip_data = []
+    for data in data_lst:
+        zip_data.append(roundTimeArray(data, 15))
+
+    # print to a csv file
+    printArray(zip_data, files_lst, 'hw_data_15.csv', 'cgm_small.csv')
