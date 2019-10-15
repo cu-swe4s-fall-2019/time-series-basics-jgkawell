@@ -120,10 +120,35 @@ class TestDataImport(unittest.TestCase):
         test_data = data_import.ImportData(file_name)
 
         for value, time in zip(values, times):
-            cur_value = test_data.linear_search_value(time)
+            cur_value = test_data.linear_search_value(time,
+                                                      test_data._time,
+                                                      test_data._value)
             self.assertIn(value, cur_value)
 
         os.remove(file_name)
+
+    def test_rounding_unique(self):
+        file_name = 'smallData/activity_small.csv'
+        resolution = 5
+
+        test_data = data_import.ImportData(file_name)
+        rounded_data = data_import.roundTimeArray(test_data, resolution)
+
+        times = []
+        for t, v in rounded_data:
+            times.append(t)
+        # make sure the rounded times are unique
+        self.assertFalse(len(times) > len(times))
+
+    def test_rounding_resolution(self):
+        file_name = 'smallData/activity_small.csv'
+        resolution = 5
+
+        test_data = data_import.ImportData(file_name)
+        rounded_data = data_import.roundTimeArray(test_data, resolution)
+        # make sure the rounded times correct resolution
+        for t, v in rounded_data:
+            self.assertTrue(t.minute % resolution == 0)
 
 
 if __name__ == '__main__':
