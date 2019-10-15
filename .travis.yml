@@ -15,4 +15,4 @@ before_install:
 script:
     - pycodestyle *.py
     - python test_data_import.py
-    - python data_import.py ./smallData tmp.data
+    - python data_import.py ./smallData tmp.data 5

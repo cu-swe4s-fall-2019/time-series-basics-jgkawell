@@ -104,18 +104,62 @@ def roundTimeArray(obj, resolution):
     return zip(unique_time, unique_value)
 
 
+def printArray(data_list, annotation_list, base_name, key_file):
+    # find index with data you want
+    base_data = []
+    key_idx = 0
+    for i in range(len(annotation_list)):
+        if annotation_list[i] == key_file:
+            base_data = data_list[i]
+            print('base data is: '+annotation_list[i])
+            key_idx = i
+            break
+        if i == len(annotation_list):
+            print('Key not found')
+
+    file = open(base_name, 'w')
+    file.write('time,')
+    # write the file name (strip off .csv)
+    file.write(annotation_list[key_idx][0:-4] + ', ')
+    # create list of keys (excluding the base key)
+    non_key = list(range(0, len(annotation_list)))
+    non_key.remove(key_idx)
+    # write the list of keys
+    for idx in non_key:
+        file.write(annotation_list[idx][0:-4] + ', ')
+
+    file.write('\n')
+    # iterate through the base data
+    for time, value in base_data:
+        # write the base data
+        file.write(str(time) + ', ' + str(value) + ', ')
+        # iterate through the other data
+        for n in non_key:
+            done = False
+            for t, v in data_list[n]:
+                if time == t:
+                    file.write(str(v) + ', ')
+                    done = True
+                    break
+
+            if not done:
+                file.write('0, ')
+        file.write('\n')
+    file.close()
+
+
 if __name__ == '__main__':
 
     # adding arguments
     parser = argparse.ArgumentParser(description='Import and combine data.',
                                      prog='dataImport')
 
-    parser.add_argument('folder_name', type=str, help='Name of the folder')
-
-    parser.add_argument('output_file', type=str, help='Name of Output file')
-
-    parser.add_argument('--number_of_files', type=int,
-                        help="Number of Files", required=False)
+    parser.add_argument('folder_name', type=str,
+                        help='Name of the folder')
+    parser.add_argument('output_file', type=str,
+                        help='Name of Output file')
+    parser.add_argument('resolution', type=int,
+                        help='The time resolution to round to (min)')
 
     args = parser.parse_args()
 
@@ -129,3 +173,11 @@ if __name__ == '__main__':
     data_lst = []
     for f in files_lst:
         data_lst.append(ImportData(folder_path+'/'+f))
+
+    # convert to zipped, rounded data
+    zip_data = []
+    for data in data_lst:
+        zip_data.append(roundTimeArray(data, args.resolution))
+
+    # print to a csv file
+    printArray(zip_data, files_lst, args.output_file, 'cgm_small.csv')
