@@ -8,12 +8,10 @@ from statistics import mean
 
 
 class ImportData:
-    def __init__(self, data_csv, resolution):
+    def __init__(self, data_csv):
         self.type = self.set_type(data_csv)
         self._time = []
         self._value = []
-        self._round_time = []
-        self._round_value = []
 
         time_error = False
         value_error = False
@@ -48,8 +46,6 @@ class ImportData:
                       + "\nOne or more values couldn\'t be parsed."
                       + " Results may be incomplete")
 
-            roundTimeArray(self, resolution)
-
         except FileNotFoundError:
             print(f"File: {data_csv} does not exist.")
 
@@ -82,6 +78,7 @@ class ImportData:
 
 
 def roundTimeArray(obj, resolution):
+    round_time = []
     unique_time = []
     for cur_time in obj._time:
         min_minus = datetime.timedelta(minutes=(cur_time.minute % resolution))
@@ -94,18 +91,17 @@ def roundTimeArray(obj, resolution):
         if new_time not in unique_time:
             unique_time.append(new_time)
 
-        obj._round_time.append(new_time)
+        round_time.append(new_time)
 
     unique_value = []
     for t in unique_time:
-        values = obj.linear_search_value(t, obj._round_time, obj._value)
+        values = obj.linear_search_value(t, round_time, obj._value)
         if obj.type in ["activity", "bolus", "meal"]:
             unique_value.append(sum(values))
         elif obj.type in ["smbg", "hr", "cgm", "basal"]:
             unique_value.append(mean(values))
 
-    obj._round_time = unique_time
-    obj._round_value = unique_value
+    return zip(unique_time, unique_value)
 
 
 if __name__ == '__main__':
