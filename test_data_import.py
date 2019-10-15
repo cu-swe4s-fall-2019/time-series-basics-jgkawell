@@ -105,6 +105,26 @@ class TestDataImport(unittest.TestCase):
         self.assertEqual(len(test_data._value), 0)
         self.assertEqual(len(test_data._time), 0)
 
+    def test_linear_search(self):
+        file_name = 'test.csv'
+        num = 100
+        test_file = open(file_name, 'w')
+        test_file.write('value,time\n')
+
+        values, times = generate_data(num)
+        for v, t in zip(values, times):
+            test_file.write(str(v) + ',' + str(t) + '\n')
+
+        test_file.close()
+
+        test_data = data_import.ImportData(file_name)
+
+        for value, time in zip(values, times):
+            cur_value = test_data.linear_search_value(time)
+            self.assertIn(value, cur_value)
+
+        os.remove(file_name)
+
 
 if __name__ == '__main__':
     unittest.main()
