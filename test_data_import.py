@@ -45,7 +45,7 @@ class TestDataImport(unittest.TestCase):
 
         test_file.close()
 
-        test_data = data_import.ImportData(file_name, 10)
+        test_data = data_import.ImportData(file_name)
 
         for i in range(0, 100):
             self.assertEqual(test_data._value[i], values[i])
@@ -67,7 +67,7 @@ class TestDataImport(unittest.TestCase):
         values.pop(15)
 
         test_file.close()
-        test_data = data_import.ImportData(file_name, 10)
+        test_data = data_import.ImportData(file_name)
 
         for i in range(0, num-1):
             self.assertEqual(test_data._value[i], values[i])
@@ -89,7 +89,7 @@ class TestDataImport(unittest.TestCase):
         values.pop(15)
 
         test_file.close()
-        test_data = data_import.ImportData(file_name, 10)
+        test_data = data_import.ImportData(file_name)
 
         for i in range(0, num-1):
             self.assertEqual(test_data._value[i], values[i])
@@ -100,7 +100,7 @@ class TestDataImport(unittest.TestCase):
     def test_bad_file(self):
         file_name = 'test.csv'
 
-        test_data = data_import.ImportData(file_name, 10)
+        test_data = data_import.ImportData(file_name)
 
         self.assertEqual(len(test_data._value), 0)
         self.assertEqual(len(test_data._time), 0)
@@ -117,7 +117,7 @@ class TestDataImport(unittest.TestCase):
 
         test_file.close()
 
-        test_data = data_import.ImportData(file_name, 10)
+        test_data = data_import.ImportData(file_name)
 
         for value, time in zip(values, times):
             cur_value = test_data.linear_search_value(time,
@@ -129,19 +129,25 @@ class TestDataImport(unittest.TestCase):
 
     def test_rounding_unique(self):
         file_name = 'smallData/activity_small.csv'
+        resolution = 5
 
-        test_data = data_import.ImportData(file_name, 10)
+        test_data = data_import.ImportData(file_name)
+        rounded_data = data_import.roundTimeArray(test_data, resolution)
+
+        times = []
+        for t, v in rounded_data:
+            times.append(t)
         # make sure the rounded times are unique
-        self.assertFalse(
-            len(test_data._round_time) > len(test_data._round_time))
+        self.assertFalse(len(times) > len(times))
 
     def test_rounding_resolution(self):
         file_name = 'smallData/activity_small.csv'
         resolution = 5
 
-        test_data = data_import.ImportData(file_name, resolution)
+        test_data = data_import.ImportData(file_name)
+        rounded_data = data_import.roundTimeArray(test_data, resolution)
         # make sure the rounded times correct resolution
-        for t in test_data._round_time:
+        for t, v in rounded_data:
             self.assertTrue(t.minute % resolution == 0)
 
 
