@@ -49,6 +49,15 @@ class ImportData:
         except FileNotFoundError:
             print(f"File: {data_csv} does not exist.")
 
+    def linear_search_value(self, key_time):
+        value_list = []
+        for i in range(len(self._time)):
+            curr = self._time[i]
+            if key_time == curr:
+                value_list.append(self._value[i])
+
+        return value_list
+
 
 if __name__ == '__main__':
 
