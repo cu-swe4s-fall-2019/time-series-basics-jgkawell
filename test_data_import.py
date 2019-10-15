@@ -6,6 +6,9 @@ import math
 import os
 import datetime
 
+from os import listdir
+from os.path import isfile, join
+
 
 TIME_1 = datetime.datetime.strptime('1/1/2008 1:00', '%m/%d/%Y %I:%M')
 TIME_2 = datetime.datetime.strptime('1/1/2008 1:15', '%m/%d/%Y %I:%M')
@@ -149,6 +152,33 @@ class TestDataImport(unittest.TestCase):
         # make sure the rounded times correct resolution
         for t, v in rounded_data:
             self.assertTrue(t.minute % resolution == 0)
+
+    def test_print_array(self):
+        folder_path = 'smallData'
+        resolution = 5
+        output_file = 'tmp.csv'
+        key_file = 'cgm_small.csv'
+
+        # pull all the folders in the file
+        files_lst = [
+            f for f in listdir(folder_path) if isfile(join(folder_path, f))]
+
+        # import all the files into a list of ImportData objects
+        data_lst = []
+        for f in files_lst:
+            data_lst.append(data_import.ImportData(folder_path + '/' + f))
+
+        # convert to zipped, rounded data
+        zip_data = []
+        for data in data_lst:
+            zip_data.append(data_import.roundTimeArray(data, resolution))
+
+        # print to a csv file
+        data_import.printArray(zip_data, files_lst, output_file, key_file)
+
+        self.assertTrue(os.path.exists(output_file))
+
+        os.remove(output_file)
 
 
 if __name__ == '__main__':
