@@ -9,6 +9,19 @@ from statistics import mean
 
 class ImportData:
     def __init__(self, data_csv):
+        """
+        Imports time and value entries from a csv file.
+
+        Parameters
+        ----------
+        data_csv : the file name (or path)
+
+        Returns
+        ----------
+        None
+
+        """
+
         self.type = self.set_type(data_csv)
         self._time = []
         self._value = []
@@ -50,6 +63,20 @@ class ImportData:
             print(f"File: {data_csv} does not exist.")
 
     def set_type(self, file_name):
+        """
+        Sets the data type for deciding how to merge
+        duplicate time entries when rounding time.
+
+        Parameters
+        ----------
+        file_name : the file name (or path)
+
+        Returns
+        ----------
+        type : string type name
+
+        """
+
         if "activity" in file_name.lower():
             return "activity"
         elif "basal" in file_name.lower():
@@ -68,6 +95,22 @@ class ImportData:
             print(f"Unknown type for file: {file_name}")
 
     def linear_search_value(self, key_time, times, values):
+        """
+        Runs a linear search over the times and returns a list
+        of values associated with the given time.
+
+        Parameters
+        ----------
+        key_time : a datetime value to search for
+        times : the list of times to search through
+        values : the list of values to retrieve from
+
+        Returns
+        ----------
+        value_list : the list of values returned from the search
+
+        """
+
         value_list = []
         for i in range(len(times)):
             cur_time = times[i]
@@ -78,6 +121,22 @@ class ImportData:
 
 
 def roundTimeArray(obj, resolution):
+    """
+    Creates time and value arrays where the times are rounded
+    to the resolution specified (in minutes). Merges duplicate
+    values based on data type.
+
+    Parameters
+    ----------
+    obj : the DataImport object
+    resolution : the resolution (in minutes) to round to
+
+    Returns
+    ----------
+    zip(time, value) : a zip of the rounded times and values
+
+    """
+
     round_time = []
     unique_time = []
     for cur_time in obj._time:
@@ -105,6 +164,28 @@ def roundTimeArray(obj, resolution):
 
 
 def printArray(data_list, annotation_list, base_name, key_file):
+    """
+    Creates a csv which aligns the data in a list of zip objects based on
+    key_file. The first column is time, the second column is the data
+    from key_file, and then the remaining headings. The function first
+    prints the time and value from the key_file associated with that
+    time. For each other file, the function finds if a value from that file
+    exists for the already printed time and (if exists) prints the value
+    (else) prints 0.
+
+    Parameters
+    ----------
+    data_list : a list of zip objects of data (time, value) pairs
+    annotation_list : a list of strings with column labels for the data value
+    base_name : the file name you want to print as
+    key_file : the name from annotation_list you want to align the data on
+
+    Returns
+    ----------
+    Nothing (creates file of output)
+
+    """
+
     # find index with data you want
     base_data = []
     key_idx = 0
