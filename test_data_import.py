@@ -22,22 +22,26 @@ def random_date(start, end):
     return start + datetime.timedelta(seconds=random_second)
 
 
+def generate_data(num):
+    values = []
+    times = []
+    for i in range(0, 100):
+        values.append(random.randint(1, 100))
+        times.append(random_date(TIME_1, TIME_2))
+    return values, times
+
+
 class TestDataImport(unittest.TestCase):
 
     def test_simple_file(self):
         file_name = 'test.csv'
+        num = 100
         test_file = open(file_name, 'w')
         test_file.write('value,time\n')
 
-        values = []
-        times = []
-        for i in range(0, 100):
-            cur_value = random.randint(1, 100)
-            cur_time = random_date(TIME_1, TIME_2)
-
-            values.append(cur_value)
-            times.append(cur_time)
-            test_file.write(str(cur_value) + ',' + str(cur_time) + '\n')
+        values, times = generate_data(num)
+        for v, t in zip(values, times):
+            test_file.write(str(v) + ',' + str(t) + '\n')
 
         test_file.close()
 
@@ -51,26 +55,21 @@ class TestDataImport(unittest.TestCase):
 
     def test_bad_time(self):
         file_name = 'test.csv'
+        num = 100
         test_file = open(file_name, 'w')
         test_file.write('value,time\n')
 
-        values = []
-        times = []
-        for i in range(0, 100):
-            cur_value = random.randint(1, 100)
-            cur_time = random_date(TIME_1, TIME_2)
-
-            if i == 15:
-                test_file.write(str(cur_value) + ',' + 'BAD TIME' + '\n')
-            else:
-                values.append(cur_value)
-                times.append(cur_time)
-                test_file.write(str(cur_value) + ',' + str(cur_time) + '\n')
+        values, times = generate_data(num)
+        times[15] = 'BAD TIME'
+        for v, t in zip(values, times):
+            test_file.write(str(v) + ',' + str(t) + '\n')
+        times.pop(15)
+        values.pop(15)
 
         test_file.close()
         test_data = data_import.ImportData(file_name)
 
-        for i in range(0, 99):
+        for i in range(0, num-1):
             self.assertEqual(test_data._value[i], values[i])
             self.assertEqual(test_data._time[i], times[i])
 
@@ -78,27 +77,21 @@ class TestDataImport(unittest.TestCase):
 
     def test_bad_value(self):
         file_name = 'test.csv'
+        num = 100
         test_file = open(file_name, 'w')
         test_file.write('value,time\n')
 
-        values = []
-        times = []
-        for i in range(0, 100):
-            cur_value = random.randint(1, 100)
-            cur_time = random_date(TIME_1, TIME_2)
-
-            if i == 15:
-                test_file.write(str(random.random()) + ','
-                                + str(cur_time) + '\n')
-            else:
-                values.append(cur_value)
-                times.append(cur_time)
-                test_file.write(str(cur_value) + ',' + str(cur_time) + '\n')
+        values, times = generate_data(num)
+        values[15] = random.random()
+        for v, t in zip(values, times):
+            test_file.write(str(v) + ',' + str(t) + '\n')
+        times.pop(15)
+        values.pop(15)
 
         test_file.close()
         test_data = data_import.ImportData(file_name)
 
-        for i in range(0, 99):
+        for i in range(0, num-1):
             self.assertEqual(test_data._value[i], values[i])
             self.assertEqual(test_data._time[i], times[i])
 
