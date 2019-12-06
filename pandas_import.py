@@ -45,4 +45,14 @@ if __name__ == '__main__':
     join_frame['time5'] = join_frame.index.round('5min')
     join_frame['time15'] = join_frame.index.round('15min')
 
-    print(join_frame)
+    # Sum values
+    sum5 = join_frame[['activity', 'bolus', 'meal', 'time5']].groupby('time5').sum()
+    sum15 = join_frame[['activity', 'bolus', 'meal', 'time15']].groupby('time15').sum()
+
+    # Average values
+    mean5 = join_frame[['smbg', 'hr', 'cgm', 'basal', 'time5']].groupby('time5').mean()
+    mean15 = join_frame[['smbg', 'hr', 'cgm', 'basal', 'time15']].groupby('time15').mean()
+
+    # Join sums and means
+    join5 = mean5.join(sum5, how='left')
+    join15 = mean15.join(sum15, how='left')
