@@ -16,3 +16,4 @@ script:
     - pycodestyle *.py
     - python test_data_import.py
     - python data_import.py ./smallData tmp.data 5
+    - python pandas_import.py
