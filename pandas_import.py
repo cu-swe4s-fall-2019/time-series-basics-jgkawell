@@ -37,3 +37,6 @@ if __name__ == '__main__':
 
     # Join frames together
     join_frame = df_cgm.join(df_list, how='left')
+
+    # Clean out all NaN values
+    join_frame.fillna(0)
