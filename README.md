@@ -55,5 +55,18 @@ Returns
 Nothing (creates file of output)
 ```
 
+## Pandas Import
+This repository also contains a Pandas implementation of the data import functionality. This is found in the script `pandas_import.py`. You can easily run it from the command line without any arguments since it automatically rounds the data to 5 minute and 15 minute increments and will pull the data from teh `./smallData` directory. After running, you'll have data saved to the `./out` directory with the names `hw_data_5_pandas.csv` and `hw_data_15_pandas.csv`. The command to run it is below:
+
+```
+python pandas_import.py
+```
+
 ## Installation
 The project only requires cloning the repository and making sure that you have Python 3 installed.
+
+If you want to use the Pandas implementation, you'll also need the `pandas` package:
+
+```
+pip install pandas
+```
