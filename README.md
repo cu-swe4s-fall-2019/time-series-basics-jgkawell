@@ -80,8 +80,9 @@ Memory: 92.728MB
 ## Installation
 The project only requires cloning the repository and making sure that you have Python 3 installed.
 
-If you want to use the Pandas implementation, you'll also need the `pandas` package:
+If you want to use the Pandas implementation, you'll also need the `pandas` and `numpy` packages:
 
 ```
 pip install pandas
+pip install numpy
 ```
