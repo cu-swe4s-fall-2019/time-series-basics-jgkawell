@@ -39,4 +39,10 @@ if __name__ == '__main__':
     join_frame = df_cgm.join(df_list, how='left')
 
     # Clean out all NaN values
-    join_frame.fillna(0)
+    join_frame.fillna(0, inplace=True)
+
+    # Create time rounded columns
+    join_frame['time5'] = join_frame.index.round('5min')
+    join_frame['time15'] = join_frame.index.round('15min')
+
+    print(join_frame)
