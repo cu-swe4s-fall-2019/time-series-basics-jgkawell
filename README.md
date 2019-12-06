@@ -62,6 +62,21 @@ This repository also contains a Pandas implementation of the data import functio
 python pandas_import.py
 ```
 
+## Benchmarking
+
+Some basic benchmarking was run comparing the two above methods. It was found that while the Pandas implementation was almost 5x faster, it used over 5x the amount of memory. Though as you can see below neither method used much time or memory during the import:
+
+```
+# Basic
+Time: 5.17s
+Memory: 16.744MB
+
+# Pandas
+Time: 1.36s
+Memory: 92.728MB
+```
+
+
 ## Installation
 The project only requires cloning the repository and making sure that you have Python 3 installed.
 
