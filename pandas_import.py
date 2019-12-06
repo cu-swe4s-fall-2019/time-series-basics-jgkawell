@@ -24,4 +24,4 @@ if __name__ == '__main__':
             df.apply(lambda x: pd.to_numeric(x, errors='coerce')).dropna()
 
         # Change value to data name
-        df.rename(columns={"value":df_name},inplace=True)
+        df.rename(columns={"value": df_name}, inplace=True)
