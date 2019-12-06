@@ -56,3 +56,7 @@ if __name__ == '__main__':
     # Join sums and means
     join5 = mean5.join(sum5, how='left')
     join15 = mean15.join(sum15, how='left')
+
+    # Print to CSV files
+    join5.to_csv('./out/hw_data_5_pandas.csv', encoding='utf-8')
+    join15.to_csv('./out/hw_data_15_pandas.csv', encoding='utf-8')
