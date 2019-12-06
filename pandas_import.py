@@ -2,11 +2,11 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 
-if __name__ == '__main__':
 
-    data_dict = {}
+def main():
 
     # Read in data
+    data_dict = {}
     data_dict['activity'] = pd.read_csv('./smallData/activity_small.csv')
     data_dict['basal'] = pd.read_csv('./smallData/basal_small.csv')
     data_dict['bolus'] = pd.read_csv('./smallData/bolus_small.csv')
@@ -46,12 +46,16 @@ if __name__ == '__main__':
     join_frame['time15'] = join_frame.index.round('15min')
 
     # Sum values
-    sum5 = join_frame[['activity', 'bolus', 'meal', 'time5']].groupby('time5').sum()
-    sum15 = join_frame[['activity', 'bolus', 'meal', 'time15']].groupby('time15').sum()
+    sum5 = join_frame[['activity', 'bolus',
+                       'meal', 'time5']].groupby('time5').sum()
+    sum15 = join_frame[['activity', 'bolus',
+                        'meal', 'time15']].groupby('time15').sum()
 
     # Average values
-    mean5 = join_frame[['smbg', 'hr', 'cgm', 'basal', 'time5']].groupby('time5').mean()
-    mean15 = join_frame[['smbg', 'hr', 'cgm', 'basal', 'time15']].groupby('time15').mean()
+    mean5 = join_frame[['smbg', 'hr', 'cgm',
+                        'basal', 'time5']].groupby('time5').mean()
+    mean15 = join_frame[['smbg', 'hr', 'cgm',
+                         'basal', 'time15']].groupby('time15').mean()
 
     # Join sums and means
     join5 = mean5.join(sum5, how='left')
@@ -60,3 +64,7 @@ if __name__ == '__main__':
     # Print to CSV files
     join5.to_csv('./out/hw_data_5_pandas.csv', encoding='utf-8')
     join15.to_csv('./out/hw_data_15_pandas.csv', encoding='utf-8')
+
+
+if __name__ == '__main__':
+    main()
